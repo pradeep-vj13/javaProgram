@@ -1,0 +1,56 @@
+package seleniumbasics;
+
+import java.util.Iterator;
+import java.util.Set;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+
+public class HandlingMutipleWindow extends Base {
+
+	public void verifyMultipleWindow() {
+
+		driver.navigate().to("https://demo.guru99.com/popup.php");
+
+		String firstWindow = driver.getWindowHandle();
+		// System.out.println(firstWindow);
+
+		WebElement clickHere = driver.findElement(By.xpath("//a[text()='Click Here']"));
+
+		clickHere.click();
+
+		Set<String> handleIds = driver.getWindowHandles();
+		System.out.println(handleIds);
+		Iterator<String> it = handleIds.iterator();
+		while (it.hasNext())
+
+		{
+
+			String currentId = it.next();
+			if (!currentId.equals(firstWindow))
+
+			{
+				driver.switchTo().window(currentId);
+				WebElement emailId = driver.findElement(By.xpath("//input[@name='emailid']"));
+				emailId.sendKeys("pradeep@ars.com");
+
+				WebElement submitButton = driver.findElement(By.xpath("//input[@name='btnLogin']"));
+				submitButton.click();
+
+				driver.switchTo().window(firstWindow); // to switch back to previous window
+
+			}
+
+		}
+
+	}
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		HandlingMutipleWindow multipleWindow = new HandlingMutipleWindow();
+		multipleWindow.browserLaunch();
+		multipleWindow.verifyMultipleWindow();
+
+	}
+
+}
